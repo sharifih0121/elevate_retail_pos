@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Receipt #{{ sale.id }}{% endblock %}
+
+{% block content %}
+<div class="card shadow p-4 mt-4">
+  <h2 class="text-center">Elevate Retail POS</h2>
+  <hr>
+  <p><strong>Receipt #: </strong>{{ sale.id }}</p>
+  <p><strong>Date: </strong>{{ sale.timestamp | datetime }}</p>
+
+  <table class="table mt-3">
+    <tr>
+      <th>Product</th>
+      <td>{{ sale.product_name }}</td>
+    </tr>
+    <tr>
+      <th>Quantity</th>
+      <td>{{ sale.quantity }}</td>
+    </tr>
+    <tr>
+      <th>Price per Unit</th>
+      <td>${{ "%.2f"|format(sale.price) }}</td>
+    </tr>
+    <tr>
+      <th>Total</th>
+      <td><strong>${{ "%.2f"|format(sale.total) }}</strong></td>
+    </tr>
+  </table>
+
+  <div class="text-center mt-4">
+    <button class="btn btn-outline-secondary" onclick="window.print()">Print Receipt</button>
+    <a href="{{ url_for('sales_page') }}" class="btn btn-primary">Back to Sales</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Sales | Elevate POS{% endblock %}
+
+{% block content %}
+  <h2 class="mb-4">Sales</h2>
+
+  <!-- Sale Form -->
+  <form action="/submit-sale" method="POST" class="card p-4 mb-4 shadow-sm">
+    <div class="row g-3 align-items-end">
+      <div class="col-md-5">
+        <label for="product_id" class="form-label">Select Product</label>
+        <select name="product_id" id="product_id" class="form-select" required>
+          <option value="" disabled selected>Select Product</option>
+          {% for product in products %}
+            <option value="{{ product.id }}">{{ product.name }} - ${{ "%.2f"|format(product.price) }} ({{ product.stock }} in stock)</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label for="quantity" class="form-label">Quantity</label>
+        <input type="number" name="quantity" id="quantity" class="form-control" placeholder="Quantity" min="1" required>
+      </div>
+      <div class="col-md-2">
+        <button type="submit" class="btn btn-success w-100">Submit Sale</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Export Button -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0">Sale History</h4>
+    <a href="/export-sales" class="btn btn-outline-secondary">Export Sales to CSV</a>
+  </div>
+
+  <!-- Sales Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>#</th>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Price ($)</th>
+          <th>Total ($)</th>
+          <th>Date</th> <!-- 🆕 -->
+          <th class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for sale in sales %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ sale.product_name }}</td>
+          <td>{{ sale.quantity }}</td>
+          <td>${{ "%.2f"|format(sale.price) }}</td>
+          <td><strong>${{ "%.2f"|format(sale.total) }}</strong></td>
+          <td>{{ sale.timestamp.strftime('%Y-%m-%d %I:%M %p') }}</td> <!-- 🆕 -->
+          <td>
+            <ul class="list-unstyled d-flex gap-2 justify-content-center mb-0">
+              <li>
+                <form action="/delete-sale/{{ sale.id }}" method="POST">
+                  <button class="btn btn-sm btn-danger" onclick="return confirm('Delete this sale?')">Delete</button>
+                </form>
+              </li>
+              <li>
+                <a href="/receipt/{{ sale.id }}" class="btn btn-sm btn-info">View Receipt</a>
+              </li>
+            </ul>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      
+    </table>
+  </div>
+{% endblock %}

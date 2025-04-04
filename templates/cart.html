@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Cart | Elevate POS{% endblock %}
+
+{% block content %}
+  <div class="card shadow p-4 mt-4">
+    <h2 class="mb-4 text-center">🛒 Your Cart</h2>
+
+    {% if cart and cart|length > 0 %}
+      <div class="table-responsive">
+        <table class="table table-striped align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th>Product</th>
+              <th>Price ($)</th>
+              <th>Quantity</th>
+              <th>Subtotal ($)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in cart %}
+            <tr>
+              <td>{{ item.name }}</td>
+              <td>${{ "%.2f"|format(item.price) }}</td>
+              <td>{{ item.quantity }}</td>
+              <td><strong>${{ "%.2f"|format(item.price * item.quantity) }}</strong></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <h4 class="text-end mt-3">Total: <span class="text-success">${{ "%.2f"|format(total) }}</span></h4>
+
+      <form action="/submit-cart" method="POST" class="text-end mt-4">
+        <button class="btn btn-success px-4">Submit Sale</button>
+      </form>
+
+    {% else %}
+      <p class="text-muted text-center">🛍️ Your cart is currently empty.</p>
+    {% endif %}
+
+    <div class="text-center mt-4">
+      <a href="{{ url_for('inventory') }}" class="btn btn-outline-secondary">⬅️ Back to Inventory</a>
+    </div>
+  </div>
+{% endblock %}
