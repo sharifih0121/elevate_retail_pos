@@ -97,7 +97,7 @@ MIT License – Free to use, modify, and distribute.
 
 ## 🙌 Created By
 
-Hamid Sharifi  
+Point of Sales (Team) 
 🚀 Built with Flask, Bootstrap, and passion for coding!
 
 ```
